@@ -8,4 +8,9 @@ let () =
   let text = Structured_text.Page.create @@ Page.boundary page in
   let dev = Structured_text.device text in
   Page.run page dev;
-  (* Device.close dev *)
+  (* Device.close dev; *)
+  let buf = Buffer.create 1024 in
+  let out = Output.with_buffer buf in
+  Structured_text.Page.print_as_text out text;
+  let text = Buffer.to_string buf in
+  Printf.printf "Text:\n\n%s\n%!" text

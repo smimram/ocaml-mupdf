@@ -60,6 +60,10 @@ module Buffer = struct
     let buf = new_buffer ctx len in
     Gc.finalise (drop_buffer ctx) buf;
     buf
+
+  let terminate buf = terminate_buffer ctx buf
+
+  let to_string buf = string_from_buffer ctx buf
 end
 
 module Output = struct

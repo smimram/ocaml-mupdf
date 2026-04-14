@@ -22,6 +22,8 @@ module Functions (F : Ctypes.FOREIGN) = struct
   let buffer : buffer typ = ptr void
   let drop_buffer = foreign "fz_drop_buffer" (context @-> buffer @-> returning void)
   let new_buffer = foreign "fz_new_buffer" (context @-> int @-> returning buffer)
+  let terminate_buffer = foreign "fz_terminate_buffer" (context @-> buffer @-> returning void)
+  let string_from_buffer = foreign "fz_string_from_buffer" (context @-> buffer @-> returning string)
 
   (** Outputs. *)
   type output = unit ptr
