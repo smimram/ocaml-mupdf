@@ -48,7 +48,15 @@ module Matrix = struct
   type t = matrix
 
   (** Identity transform matrix. *)
-  let identity = !@ identity
+  let identity =
+    let m = make Types_generated.matrix in
+    setf m Types_generated.matrix_a 1.0;
+    setf m Types_generated.matrix_b 0.0;
+    setf m Types_generated.matrix_c 0.0;
+    setf m Types_generated.matrix_d 1.0;
+    setf m Types_generated.matrix_e 0.0;
+    setf m Types_generated.matrix_f 0.0;
+    m
 end
 
 module Quad = struct

@@ -22,6 +22,12 @@ module Types (T : Ctypes.TYPE) = struct
   (** Matrix. *)
   type matrix
   let matrix : matrix structure typ = typedef (structure "fz_matrix") "fz_matrix"
+  let matrix_a = field matrix "a" float
+  let matrix_b = field matrix "b" float
+  let matrix_c = field matrix "c" float
+  let matrix_d = field matrix "d" float
+  let matrix_e = field matrix "e" float
+  let matrix_f = field matrix "f" float
   let () = seal matrix
 
   (** Point. *)

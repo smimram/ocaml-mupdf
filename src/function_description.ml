@@ -15,7 +15,6 @@ module Functions (F : Ctypes.FOREIGN) = struct
 
   (** Matrices. *)
   type nonrec matrix = matrix
-  let identity = F.foreign_value "fz_identity" matrix
 
   (** Buffers. *)
   type buffer = unit ptr
