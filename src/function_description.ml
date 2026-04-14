@@ -66,6 +66,7 @@ module Functions (F : Ctypes.FOREIGN) = struct
   let count_pages = foreign "fz_count_pages" (context @-> document @-> returning int)
   let load_page = foreign "fz_load_page" (context @-> document @-> int @-> returning page)
   let last_page = foreign "fz_last_page" (context @-> document @-> returning location)
+  let count_chapters = foreign "fz_count_chapters" (context @-> document @-> returning int)
 end
 
 (**/**)

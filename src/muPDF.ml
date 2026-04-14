@@ -201,4 +201,7 @@ module Document = struct
 
   (** Get the location for the last page in the document. Using this can be far more efficient in some cases than calling count_pages and using the page number. *)
   let last_page doc = last_page ctx doc
+
+  (** Number of chapters in the document. *)
+  let count_chapters doc : int = count_chapters ctx doc
 end
