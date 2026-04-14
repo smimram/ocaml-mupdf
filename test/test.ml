@@ -15,4 +15,5 @@ let () =
   let out = Output.with_buffer buf in
   Structured_text.Page.print_as_text out text;
   let text = Buffer.to_string buf in
-  Printf.printf "Text:\n\n%s\n%!" text
+  Printf.printf "Text:\n\n%s\n%!" text;
+  Printf.printf "%d occurrences of `world`\n%!" (List.length @@ Page.search page "world")
