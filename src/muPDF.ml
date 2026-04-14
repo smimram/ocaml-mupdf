@@ -103,6 +103,17 @@ module Page = struct
   let boundary page : Rectangle.t = Rectangle.of_struct @@ bound_page ctx page
 
   let run page ?(transform=Matrix.identity) dev = run_page ctx page dev transform None
+
+  (** String representation of the contents of the page. *)
+  let get_text page =
+    let text = Structured_text.Page.create @@ boundary page in
+    let dev = Structured_text.device text in
+    run page dev;
+    Device.close dev;
+    let buf = Buffer.create 1024 in
+    let out = Output.with_buffer buf in
+    Structured_text.Page.print_as_text out text;
+    Buffer.to_string buf
 end
 
 module Document = struct
