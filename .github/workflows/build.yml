@@ -7,7 +7,7 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
     - name: Install dependencies
-      run: sudo apt-get -y install ocaml ocaml-dune ocaml-odoc libctypes-ocaml-dev libmupdf-dev
+      run: sudo apt-get -y install ocaml ocaml-dune ocaml-odoc libctypes-ocaml-dev libmupdf-dev libfreetype-dev
     - name: Build
       run: make
     - name: Test
