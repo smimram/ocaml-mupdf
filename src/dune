@@ -8,7 +8,7 @@
  (ctypes
   (external_library_name mupdf)
   (build_flags_resolver pkg_config)
-  (headers (include "mupdf/fitz.h" "mupdf/fitz/types.h"))
+  (headers (include "mupdf/fitz.h"))
   (type_description
    (instance Types)
    (functor Type_description)

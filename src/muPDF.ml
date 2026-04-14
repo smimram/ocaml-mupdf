@@ -22,8 +22,26 @@ end
 
 let ctx = Context.create ()
 
+module Matrix = struct
+  type t = matrix
+
+  let identity = !@ identity
+end
+
+module Device = struct
+  let close dev =
+    close_device ctx dev
+
+  let stext page =
+    let dev = new_stext_device ctx page None in
+    Gc.finalise (drop_device ctx) dev;
+    ctx
+end
+
 module Page = struct
   type t = page
+
+  let run page ?(transform=Matrix.identity) dev = run_page ctx page dev transform None
 end
 
 module Document = struct
