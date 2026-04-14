@@ -199,6 +199,9 @@ module Document = struct
     Gc.finalise (drop_page ctx) page;
     page
 
+  (** All pages of the document. *)
+  let pages doc = List.init (count_pages doc) (load_page doc)
+
   (** Get the location for the last page in the document. Using this can be far more efficient in some cases than calling count_pages and using the page number. *)
   let last_page doc = last_page ctx doc
 
