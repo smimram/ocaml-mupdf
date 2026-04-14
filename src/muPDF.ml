@@ -216,6 +216,10 @@ module PDF = struct
       Gc.finalise (PDF.drop_document ctx) doc;
       doc
 
+    (** Write out the document to a file with all changes finalised. *)
+    let save doc fname =
+      PDF.save_document ctx doc fname None
+
     let count_pages doc : int =
       PDF.count_pages ctx doc
 
