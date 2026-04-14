@@ -1,13 +1,14 @@
 (library
  (name mupdf)
  (public_name mupdf)
+ ; (wrapped false)
  (libraries ctypes-foreign)
  ; ctypes backward compatibility shims warn sometimes; suppress them
  ; (flags (:standard -w -9-27))
  (ctypes
   (external_library_name mupdf)
   (build_flags_resolver pkg_config)
-  (headers (include "mupdf/fitz.h"))
+  (headers (include "mupdf/fitz.h" "mupdf/pdf.h"))
   (type_description
    (instance Types)
    (functor Type_description)
