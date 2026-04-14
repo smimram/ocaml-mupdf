@@ -4,4 +4,7 @@ all:
 test:
 	@dune runtest
 
-.PHONY: test
+doc:
+	@dune build @doc
+
+.PHONY: test doc

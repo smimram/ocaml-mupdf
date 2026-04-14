@@ -14,7 +14,7 @@ module Functions (F : Ctypes.FOREIGN) = struct
   let drop_context = foreign "fz_drop_context" (context @-> returning void)
 
   (** Matrices. *)
-  type nonrec matrix = matrix
+  type matrix = Types.matrix
 
   (** Buffers. *)
   type buffer = unit ptr
@@ -67,3 +67,5 @@ module Functions (F : Ctypes.FOREIGN) = struct
   let load_page = foreign "fz_load_page" (context @-> document @-> int @-> returning page)
   let last_page = foreign "fz_last_page" (context @-> document @-> returning location)
 end
+
+(**/**)

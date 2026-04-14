@@ -1,7 +1,12 @@
+(** Main module containing all the MuPDF bindings. *)
+
+(**/**)
 open Ctypes
 
 include C.Functions
+(**/**)
 
+(** MuPDF computation contexts. *)
 module Context = struct
   type t = context
 
@@ -17,9 +22,13 @@ module Context = struct
     ctx
 end
 
+(**/**)
 let ctx = Context.create ()
+(**/**)
 
+(** Rectangles. *)
 module Rectangle = struct
+  (** A rectangle. *)
   type t = {
       x0 : float;
       y0 : float;
@@ -27,6 +36,7 @@ module Rectangle = struct
       y1 : float;
     }
 
+  (**/**)
   let of_struct x =
     {
       x0 = getf x Types_generated.rect_x0;
@@ -42,13 +52,16 @@ module Rectangle = struct
     setf s Types_generated.rect_x1 r.x1;
     setf s Types_generated.rect_y1 r.y1;
     s
+  (**/**)
 end
 
+(** Matrices. *)
 module Matrix = struct
-  type t = matrix
+  (** A transform matrix. *)
+  type t = (matrix, [`Struct]) structured
 
   (** Identity transform matrix. *)
-  let identity =
+  let identity : t =
     let m = make Types_generated.matrix in
     setf m Types_generated.matrix_a 1.0;
     setf m Types_generated.matrix_b 0.0;
@@ -59,6 +72,7 @@ module Matrix = struct
     m
 end
 
+(** Quadrangles. *)
 module Quad = struct
   type t = {
     ul : float * float;
@@ -67,6 +81,7 @@ module Quad = struct
     lr : float * float;
   }
 
+  (**/**)
   let of_struct q =
     let xy f = let p = getf q f in (getf p Types_generated.point_x, getf p Types_generated.point_y) in
     {
@@ -75,67 +90,76 @@ module Quad = struct
       ll = xy Types_generated.quad_ll;
       lr = xy Types_generated.quad_lr;
     }
+  (**/**)
 end
 
+(** Buffers. *)
 module Buffer = struct
+  (** A buffer. *)
   type t = buffer
 
-  let create len =
+  (** Create a buffer. *)
+  let create len : t =
     let buf = new_buffer ctx len in
     Gc.finalise (drop_buffer ctx) buf;
     buf
 
   (** Zero-terminate buffer in order to use as a C string. *)
-  let terminate buf = terminate_buffer ctx buf
+  let terminate buf : unit = terminate_buffer ctx buf
 
   (** String contents of a buffer. *)
-  let to_string buf = string_from_buffer ctx buf
+  let to_string buf : string = string_from_buffer ctx buf
 end
 
+(** Outputs. *)
 module Output = struct
   type t = output
 
   (** Output to a buffer. *)
-  let with_buffer buf =
+  let with_buffer buf : output =
     let out = new_output_with_buffer ctx buf in
     Gc.finalise (drop_output ctx) out;
     out
 end
 
+(** Devices. *)
 module Device = struct
   type t = device
 
-  let close dev =
+  let close dev : unit =
     close_device ctx dev
 end
 
+(** Structured text. *)
 module Structured_text = struct
   module Page = struct
     type t = stext_page
 
-    let create box =
+    let create box : t =
       let page = new_stext_page ctx (Rectangle.to_struct box) in
       Gc.finalise (drop_stext_page ctx) page;
       page
 
     (** Print a page as text. *)
-    let print_as_text out page = print_stext_page_as_text ctx out page
+    let print_as_text out page : unit = print_stext_page_as_text ctx out page
   end
 
-  let device page =
+  let device page : Device.t =
     let dev = new_stext_device ctx page None in
     Gc.finalise (drop_device ctx) dev;
     dev
 end
 
+(** Pages. *)
 module Page = struct
+  (** A page. *)
   type t = page
 
   (** Determine the size of a page at 72 dpi. *)
   let boundary page : Rectangle.t = Rectangle.of_struct @@ bound_page ctx page
 
   (** Run a page through a device. *)
-  let run ?(transform=Matrix.identity) page dev = run_page ctx page dev transform None
+  let run ?(transform=Matrix.identity) page dev : unit = run_page ctx page dev transform None
 
   (** String representation of the contents of the page. *)
   let get_text page =
@@ -155,20 +179,22 @@ module Page = struct
     List.init n (fun i -> Quad.of_struct (CArray.get hits i))
 end
 
+(** Documents. *)
 module Document = struct
+  (** A document. *)
   type t = document
 
   (** Register handlers for all the standard document types supported in this build. *)
-  let register_handlers () = register_document_handlers ctx
+  let register_handlers () : unit = register_document_handlers ctx
 
   (** Open a document file and read its basic structure so pages and objects can be located. MuPDF will try to repair broken documents (without actually changing the file contents). *)
   let open_document fname = Option.get @@ open_document ctx fname
 
   (** Return the number of pages in document. *)
-  let count_pages doc = count_pages ctx doc
+  let count_pages doc : int = count_pages ctx doc
 
   (** Load a given page number from a document. This may be much less efficient than loading by location (chapter+page) for some document types. *)
-  let load_page doc n =
+  let load_page doc n : Page.t =
     let page = load_page ctx doc n in
     Gc.finalise (drop_page ctx) page;
     page
