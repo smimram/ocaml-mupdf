@@ -22,6 +22,10 @@ end
 
 let ctx = Context.create ()
 
+module Page = struct
+  type t = page
+end
+
 module Document = struct
   type t = document
 
@@ -30,4 +34,9 @@ module Document = struct
   let open_document fname = Option.get @@ open_document ctx fname
 
   let count_pages doc = count_pages ctx doc
+
+  let load_page doc n =
+    let page = load_page ctx doc n in
+    Gc.finalise (drop_page ctx) page;
+    page
 end

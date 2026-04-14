@@ -16,6 +16,15 @@ module Functions (F : Ctypes.FOREIGN) = struct
 
   let drop_context = foreign "fz_drop_context" (context @-> returning void)
 
+  (** Pages. *)
+  type page = unit ptr
+
+  let page : page typ = ptr void
+
+  let page_opt : page option typ = ptr_opt void
+
+  let drop_page = foreign "fz_drop_page" (context @-> page @-> returning void)
+
   (** Documents. *)
   type document = unit ptr
 
@@ -28,4 +37,6 @@ module Functions (F : Ctypes.FOREIGN) = struct
   let open_document = foreign "fz_open_document" (context @-> string @-> returning document_opt)
 
   let count_pages = foreign "fz_count_pages" (context @-> document @-> returning int)
+
+  let load_page = foreign "fz_load_page" (context @-> document @-> int @-> returning page)
 end
