@@ -218,5 +218,9 @@ module PDF = struct
 
     let count_pages doc : int =
       PDF.count_pages ctx doc
+
+    (** Graft a page (and its resources) from the src document to the destination document of the graft. This involves a deep copy of the objects in question. *)
+    let graft_pages dst page_to src page_from : unit =
+      PDF.graft_page ctx dst page_to src page_from
   end
 end
