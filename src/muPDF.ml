@@ -22,10 +22,41 @@ end
 
 let ctx = Context.create ()
 
+module Rectangle = struct
+  type t = {
+      x0 : float;
+      y0 : float;
+      x1 : float;
+      y1 : float;
+    }
+
+  let of_struct x =
+    {
+      x0 = getf x Types_generated.rect_x0;
+      y0 = getf x Types_generated.rect_y0;
+      x1 = getf x Types_generated.rect_x1;
+      y1 = getf x Types_generated.rect_y1;
+    }
+
+  let to_struct r =
+    let s = make Types_generated.rect in
+    setf s Types_generated.rect_x0 r.x0;
+    setf s Types_generated.rect_y0 r.y0;
+    setf s Types_generated.rect_x1 r.x1;
+    setf s Types_generated.rect_y1 r.y1;
+    s
+end
+
 module Matrix = struct
   type t = matrix
 
   let identity = !@ identity
+end
+
+module Structured_text = struct
+  module Page = struct
+    let create box = new_stext_page ctx (Rectangle.to_struct box)
+  end
 end
 
 module Device = struct
@@ -40,6 +71,8 @@ end
 
 module Page = struct
   type t = page
+
+  let boundary page : Rectangle.t = Rectangle.of_struct @@ bound_page ctx page
 
   let run page ?(transform=Matrix.identity) dev = run_page ctx page dev transform None
 end

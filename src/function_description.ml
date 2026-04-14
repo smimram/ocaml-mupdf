@@ -46,6 +46,8 @@ module Functions (F : Ctypes.FOREIGN) = struct
 
   let drop_page = foreign "fz_drop_page" (context @-> page @-> returning void)
 
+  let bound_page = foreign "fz_bound_page" (context @-> page @-> returning rect)
+
   let run_page = foreign "fz_run_page" (context @-> page @-> device @-> matrix @-> cookie_opt @-> returning void)
 
   (** Documents. *)
