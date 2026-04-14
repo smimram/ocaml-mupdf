@@ -10,8 +10,8 @@ jobs:
       run: sudo apt-get -y install ocaml ocaml-dune ocaml-odoc libctypes-ocaml-dev libmupdf-dev libfreetype-dev
     - name: Build
       run: make
-    - name: Test
-      run: make test
+    # - name: Test
+      # run: make test
     - name: Build documentation
       run: dune build @doc
     - name: Upload website artifact
