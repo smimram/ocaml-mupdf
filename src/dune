@@ -2,7 +2,7 @@
  (name mupdf)
  (public_name mupdf)
  ; (wrapped false)
- (libraries ctypes.foreign)
+ (libraries ctypes)
  ; ctypes backward compatibility shims warn sometimes; suppress them
  ; (flags (:standard -w -9-27))
  (ctypes
