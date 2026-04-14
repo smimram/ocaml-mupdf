@@ -105,7 +105,10 @@ module Structured_text = struct
   module Page = struct
     type t = stext_page
 
-    let create box = new_stext_page ctx (Rectangle.to_struct box)
+    let create box =
+      let page = new_stext_page ctx (Rectangle.to_struct box) in
+      Gc.finalise (drop_stext_page ctx) page;
+      page
 
     (** Print a page as text. *)
     let print_as_text out page = print_stext_page_as_text ctx out page
