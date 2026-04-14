@@ -74,10 +74,9 @@ int main(int argc, char **argv)
         fz_terminate_buffer(ctx, buf);
 
         // Récupération du pointeur vers la chaîne finale
-        unsigned char *final_string;
-        size_t total_len = fz_buffer_storage(ctx, buf, &final_string);
+        const unsigned char *final_string = fz_string_from_buffer(ctx, buf);
 
-        printf("--- Début du texte extrait (%zu octets) ---\n", total_len);
+        printf("--- Début du texte extrait ---\n");
         printf("%s\n", (char *)final_string);
         printf("--- Fin du texte ---\n");
     }

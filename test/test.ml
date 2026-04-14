@@ -5,7 +5,9 @@ let () =
   let doc = Document.open_document "test.pdf" in
   Printf.printf "Pages: %d\n%!" @@ Document.count_pages doc;
   let page = Document.load_page doc 0 in
-  let text = Structured_text.Page.create @@ Page.boundary page in
+  let rect = Page.boundary page in
+  Printf.printf "rect: %.02f,%.02f x %.02f,%.02f\n%!" rect.x0 rect.y0 rect.x1 rect.y1;
+  let text = Structured_text.Page.create rect in
   let dev = Structured_text.device text in
   Page.run page dev;
   (* Device.close dev; *)
