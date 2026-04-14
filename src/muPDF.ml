@@ -53,17 +53,41 @@ module Matrix = struct
   let identity = !@ identity
 end
 
-module Structured_text = struct
-  module Page = struct
-    let create box = new_stext_page ctx (Rectangle.to_struct box)
-  end
+module Buffer = struct
+  type t = buffer
+
+  let create len =
+    let buf = new_buffer ctx len in
+    Gc.finalise (drop_buffer ctx) buf;
+    buf
+end
+
+module Output = struct
+  type t = output
+
+  let with_buffer buf =
+    let out = new_output_with_buffer ctx buf in
+    Gc.finalise (drop_output ctx) out;
+    out
 end
 
 module Device = struct
+  type t = device
+
   let close dev =
     close_device ctx dev
+end
 
-  let stext page =
+module Structured_text = struct
+  module Page = struct
+    type t = stext_page
+
+    let create box = new_stext_page ctx (Rectangle.to_struct box)
+
+    let print_as_text out page = print_stext_page_as_text ctx out page
+  end
+
+  let device page =
     let dev = new_stext_device ctx page None in
     Gc.finalise (drop_device ctx) dev;
     ctx
