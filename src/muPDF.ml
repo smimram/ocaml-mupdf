@@ -15,9 +15,6 @@ module Context = struct
     let ctx = Option.get ctx in
     Gc.finalise drop_context ctx;
     ctx
-
-  (* Default context. *)
-  let default = create ()
 end
 
 let ctx = Context.create ()
@@ -50,6 +47,7 @@ end
 module Matrix = struct
   type t = matrix
 
+  (** Identity transform matrix. *)
   let identity = !@ identity
 end
 
@@ -61,14 +59,17 @@ module Buffer = struct
     Gc.finalise (drop_buffer ctx) buf;
     buf
 
+  (** Zero-terminate buffer in order to use as a C string. *)
   let terminate buf = terminate_buffer ctx buf
 
+  (** String contents of a buffer. *)
   let to_string buf = string_from_buffer ctx buf
 end
 
 module Output = struct
   type t = output
 
+  (** Output to a buffer. *)
   let with_buffer buf =
     let out = new_output_with_buffer ctx buf in
     Gc.finalise (drop_output ctx) out;
@@ -88,6 +89,7 @@ module Structured_text = struct
 
     let create box = new_stext_page ctx (Rectangle.to_struct box)
 
+    (** Print a page as text. *)
     let print_as_text out page = print_stext_page_as_text ctx out page
   end
 
@@ -100,8 +102,10 @@ end
 module Page = struct
   type t = page
 
+  (** Determine the size of a page at 72 dpi. *)
   let boundary page : Rectangle.t = Rectangle.of_struct @@ bound_page ctx page
 
+  (** Run a page through a device. *)
   let run page ?(transform=Matrix.identity) dev = run_page ctx page dev transform None
 
   (** String representation of the contents of the page. *)
@@ -119,16 +123,21 @@ end
 module Document = struct
   type t = document
 
+  (** Register handlers for all the standard document types supported in this build. *)
   let register_handlers () = register_document_handlers ctx
 
+  (** Open a document file and read its basic structure so pages and objects can be located. MuPDF will try to repair broken documents (without actually changing the file contents). *)
   let open_document fname = Option.get @@ open_document ctx fname
 
+  (** Return the number of pages in document. *)
   let count_pages doc = count_pages ctx doc
 
+  (** Load a given page number from a document. This may be much less efficient than loading by location (chapter+page) for some document types. *)
   let load_page doc n =
     let page = load_page ctx doc n in
     Gc.finalise (drop_page ctx) page;
     page
 
-  (* let last_page doc = last_page ctx doc *)
+  (** Get the location for the last page in the document. Using this can be far more efficient in some cases than calling count_pages and using the page number. *)
+  let last_page doc = last_page ctx doc
 end
