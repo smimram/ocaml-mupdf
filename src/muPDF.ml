@@ -217,14 +217,14 @@ module PDF = struct
       doc
 
     (** Write out the document to a file with all changes finalised. *)
-    let save doc fname =
+    let save (doc:t) fname : unit =
       PDF.save_document ctx doc fname None
 
     let count_pages doc : int =
       PDF.count_pages ctx doc
 
     (** Graft a page (and its resources) from the src document to the destination document of the graft. This involves a deep copy of the objects in question. *)
-    let graft_pages dst page_to src page_from : unit =
+    let graft_pages (dst:t) page_to (src:t) page_from : unit =
       PDF.graft_page ctx dst page_to src page_from
   end
 end
