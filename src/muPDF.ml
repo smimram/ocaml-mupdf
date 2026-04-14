@@ -211,9 +211,12 @@ module PDF = struct
   module Document = struct
     type t = PDF.document
 
-    let create () =
+    let create () : t =
       let doc = PDF.create_document ctx in
       Gc.finalise (PDF.drop_document ctx) doc;
       doc
+
+    let count_pages doc : int =
+      PDF.count_pages ctx doc
   end
 end
