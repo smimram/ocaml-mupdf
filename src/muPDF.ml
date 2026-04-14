@@ -39,4 +39,6 @@ module Document = struct
     let page = load_page ctx doc n in
     Gc.finalise (drop_page ctx) page;
     page
+
+  (* let last_page doc = last_page ctx doc *)
 end

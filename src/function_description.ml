@@ -4,6 +4,7 @@ open Ctypes
 module Types = Types_generated
 
 module Functions (F : Ctypes.FOREIGN) = struct
+  (* open Types *)
   open F
 
   (** Contexts. *)
@@ -15,6 +16,15 @@ module Functions (F : Ctypes.FOREIGN) = struct
   let new_context = foreign "fz_new_context" (ptr void @-> ptr void @-> int @-> returning (ptr_opt void))
 
   let drop_context = foreign "fz_drop_context" (context @-> returning void)
+
+  (*
+  (** Location. *)
+  type location
+  let location : location structure typ = structure "fz_location"
+  let location_chapter = field location "chapter" int
+  let location_page = field location "page" int
+  let () = seal location
+   *)
 
   (** Pages. *)
   type page = unit ptr
@@ -39,4 +49,6 @@ module Functions (F : Ctypes.FOREIGN) = struct
   let count_pages = foreign "fz_count_pages" (context @-> document @-> returning int)
 
   let load_page = foreign "fz_load_page" (context @-> document @-> int @-> returning page)
+
+  (* let last_page = foreign "fz_last_page" (context @-> document @-> returning location) *)
 end
