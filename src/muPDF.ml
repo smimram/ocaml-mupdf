@@ -51,6 +51,24 @@ module Matrix = struct
   let identity = !@ identity
 end
 
+module Quad = struct
+  type t = {
+    ul : float * float;
+    ur : float * float;
+    ll : float * float;
+    lr : float * float;
+  }
+
+  let of_struct q =
+    let xy f = let p = getf q f in (getf p Types_generated.point_x, getf p Types_generated.point_y) in
+    {
+      ul = xy Types_generated.quad_ul;
+      ur = xy Types_generated.quad_ur;
+      ll = xy Types_generated.quad_ll;
+      lr = xy Types_generated.quad_lr;
+    }
+end
+
 module Buffer = struct
   type t = buffer
 
@@ -106,7 +124,7 @@ module Page = struct
   let boundary page : Rectangle.t = Rectangle.of_struct @@ bound_page ctx page
 
   (** Run a page through a device. *)
-  let run page ?(transform=Matrix.identity) dev = run_page ctx page dev transform None
+  let run ?(transform=Matrix.identity) page dev = run_page ctx page dev transform None
 
   (** String representation of the contents of the page. *)
   let get_text page =
@@ -118,6 +136,12 @@ module Page = struct
     let out = Output.with_buffer buf in
     Structured_text.Page.print_as_text out text;
     Buffer.to_string buf
+
+  (** Search for needle in a page. Returns the list of matching quad bounding boxes. *)
+  let search ?(max_hits=50) page needle =
+    let hits = CArray.make Types_generated.quad max_hits in
+    let n = search_page ctx page needle None (CArray.start hits) max_hits in
+    List.init n (fun i -> Quad.of_struct (CArray.get hits i))
 end
 
 module Document = struct

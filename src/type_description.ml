@@ -23,4 +23,20 @@ module Types (T : Ctypes.TYPE) = struct
   type matrix
   let matrix : matrix structure typ = typedef (structure "fz_matrix") "fz_matrix"
   let () = seal matrix
+
+  (** Point. *)
+  type point
+  let point : point structure typ = typedef (structure "fz_point") "fz_point"
+  let point_x = field point "x" float
+  let point_y = field point "y" float
+  let () = seal point
+
+  (** Quad (quadrilateral with upper-left, upper-right, lower-left, lower-right corners). *)
+  type quad
+  let quad : quad structure typ = typedef (structure "fz_quad") "fz_quad"
+  let quad_ul = field quad "ul" point
+  let quad_ur = field quad "ur" point
+  let quad_ll = field quad "ll" point
+  let quad_lr = field quad "lr" point
+  let () = seal quad
 end
