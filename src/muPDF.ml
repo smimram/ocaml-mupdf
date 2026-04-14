@@ -94,7 +94,7 @@ module Structured_text = struct
   let device page =
     let dev = new_stext_device ctx page None in
     Gc.finalise (drop_device ctx) dev;
-    ctx
+    dev
 end
 
 module Page = struct
