@@ -4,11 +4,10 @@ open Ctypes
 module Types = Types_generated
 
 module Functions (F : Ctypes.FOREIGN) = struct
-  (* open Types *)
+  open Types
   open F
 
   (** Contexts. *)
-
   type context = unit ptr
 
   let context : context typ = ptr void
@@ -17,14 +16,8 @@ module Functions (F : Ctypes.FOREIGN) = struct
 
   let drop_context = foreign "fz_drop_context" (context @-> returning void)
 
-  (*
-  (** Location. *)
-  type location
-  let location : location structure typ = structure "fz_location"
-  let location_chapter = field location "chapter" int
-  let location_page = field location "page" int
-  let () = seal location
-   *)
+  (* (\** Matrices. *\) *)
+  (* type matrix *)
 
   (** Pages. *)
   type page = unit ptr
@@ -34,6 +27,11 @@ module Functions (F : Ctypes.FOREIGN) = struct
   let page_opt : page option typ = ptr_opt void
 
   let drop_page = foreign "fz_drop_page" (context @-> page @-> returning void)
+
+  (** Devices. *)
+  type device = unit ptr
+
+  let device : device typ = ptr void
 
   (** Documents. *)
   type document = unit ptr
@@ -50,5 +48,7 @@ module Functions (F : Ctypes.FOREIGN) = struct
 
   let load_page = foreign "fz_load_page" (context @-> document @-> int @-> returning page)
 
-  (* let last_page = foreign "fz_last_page" (context @-> document @-> returning location) *)
+  let last_page = foreign "fz_last_page" (context @-> document @-> returning location)
+
+  (* let run_page = foreign "fz_run_page" (context @-> page @-> device @-> matrix @-> cookie_opt @-> returning void) *)
 end
