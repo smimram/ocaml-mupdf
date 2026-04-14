@@ -67,6 +67,13 @@ module Functions (F : Ctypes.FOREIGN) = struct
   let load_page = foreign "fz_load_page" (context @-> document @-> int @-> returning page)
   let last_page = foreign "fz_last_page" (context @-> document @-> returning location)
   let count_chapters = foreign "fz_count_chapters" (context @-> document @-> returning int)
+
+  module PDF = struct
+    type document = unit ptr
+    let document : document typ = ptr void
+    let create_document = foreign "pdf_create_document" (context @-> returning document)
+    let drop_document = foreign "pdf_drop_document" (context @-> document @-> returning void)
+  end
 end
 
 (**/**)

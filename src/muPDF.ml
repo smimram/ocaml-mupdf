@@ -205,3 +205,15 @@ module Document = struct
   (** Number of chapters in the document. *)
   let count_chapters doc : int = count_chapters ctx doc
 end
+
+(** High-level interface for pdf manipulation. *)
+module PDF = struct
+  module Document = struct
+    type t = PDF.document
+
+    let create () =
+      let doc = PDF.create_document ctx in
+      Gc.finalise (PDF.drop_document ctx) doc;
+      doc
+  end
+end
