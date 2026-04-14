@@ -1,3 +1,6 @@
+open Mupdf.MuPDF
+
 let () =
-  let _ = Mupdf.PDF.open_document "test.pdf" in
-  ()
+  Document.register_handlers ();
+  let doc = Document.open_document "test.pdf" in
+  Printf.printf "Pages: %d\n%!" @@ Document.count_pages doc

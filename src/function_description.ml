@@ -6,25 +6,26 @@ module Types = Types_generated
 module Functions (F : Ctypes.FOREIGN) = struct
   open F
 
+  (** Contexts. *)
+
   type context = unit ptr
 
   let context : context typ = ptr void
 
-  module Context = struct
-    type t = context
+  let new_context = foreign "fz_new_context" (ptr void @-> ptr void @-> int @-> returning (ptr_opt void))
 
-    let t = context
+  let drop_context = foreign "fz_drop_context" (context @-> returning void)
 
-    let create = foreign "fz_new_context" (ptr void @-> ptr void @-> int @-> returning (ptr_opt void))
+  (** Documents. *)
+  type document = unit ptr
 
-    let drop = foreign "fz_drop_context" (t @-> returning void)
-  end
+  let document : document typ = ptr void
 
-  module PDF = struct
-    type t = unit ptr
+  let document_opt : document option typ = ptr_opt void
 
-    let t : t typ = ptr void
+  let register_document_handlers = foreign "fz_register_document_handlers" (context @-> returning void)
 
-    let open_document = foreign "pdf_open_document" (context @-> string @-> returning t)
-  end
+  let open_document = foreign "fz_open_document" (context @-> string @-> returning document_opt)
+
+  let count_pages = foreign "fz_count_pages" (context @-> document @-> returning int)
 end
