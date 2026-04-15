@@ -74,12 +74,14 @@ end
 
 (** Quadrangles. *)
 module Quad = struct
-  type t = {
-    ul : float * float;
-    ur : float * float;
-    ll : float * float;
-    lr : float * float;
-  }
+  (** A representation for a region defined by 4 points. The significant difference between quads and rects is that the edges of quads are not axis aligned. *)
+  type t =
+    {
+      ul : float * float; (** upper-left corner *)
+      ur : float * float; (** upper-right corner *)
+      ll : float * float; (** lower-left corner *)
+      lr : float * float; (** lower-right corner *)
+    }
 
   (**/**)
   let of_struct q =
