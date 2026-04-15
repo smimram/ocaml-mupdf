@@ -29,6 +29,7 @@ module Functions (F : Ctypes.FOREIGN) = struct
   let output : output typ = ptr void
   let drop_output = foreign "fz_drop_output" (context @-> output @-> returning void)
   let new_output_with_buffer = foreign "fz_new_output_with_buffer" (context @-> buffer @-> returning output)
+  let close_output = foreign "fz_close_output" (context @-> output @-> returning void)
 
   (** Cookies. *)
   type cookie = unit ptr
@@ -63,6 +64,7 @@ module Functions (F : Ctypes.FOREIGN) = struct
   let document_opt : document option typ = ptr_opt void
   let register_document_handlers = foreign "fz_register_document_handlers" (context @-> returning void)
   let open_document = foreign "fz_open_document" (context @-> string @-> returning document_opt)
+  let drop_document = foreign "fz_drop_document" (context @-> document @-> returning void)
   let count_pages = foreign "fz_count_pages" (context @-> document @-> returning int)
   let load_page = foreign "fz_load_page" (context @-> document @-> int @-> returning page)
   let last_page = foreign "fz_last_page" (context @-> document @-> returning location)

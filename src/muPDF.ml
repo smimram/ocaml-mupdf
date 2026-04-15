@@ -115,6 +115,9 @@ end
 module Output = struct
   type t = output
 
+  (** Flush pending output and close an output stream. *)
+  let close out : unit = close_output ctx out
+
   (** Output to a buffer. *)
   let with_buffer buf : output =
     let out = new_output_with_buffer ctx buf in
@@ -188,7 +191,9 @@ module Document = struct
   let register_handlers () : unit = register_document_handlers ctx
 
   (** Open a document file and read its basic structure so pages and objects can be located. MuPDF will try to repair broken documents (without actually changing the file contents). *)
-  let open_document fname = Option.get @@ open_document ctx fname
+  let open_document fname : t = Option.get @@ open_document ctx fname
+
+  let close doc : unit = drop_document ctx doc
 
   (** Return the number of pages in document. *)
   let count_pages doc : int = count_pages ctx doc
@@ -214,10 +219,10 @@ module PDF = struct
   module Document = struct
     type t = PDF.document
 
-    let create () : t =
-      let doc = PDF.create_document ctx in
-      Gc.finalise (PDF.drop_document ctx) doc;
-      doc
+    let create () : t = PDF.create_document ctx
+
+    (** Close document. *)
+    let close doc : unit = PDF.drop_document ctx doc
 
     (** Write out the document to a file with all changes finalised. *)
     let save (doc:t) fname : unit =
