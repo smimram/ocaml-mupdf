@@ -6,13 +6,13 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v6
-     - name: Set-up OCaml
-        uses: ocaml/setup-ocaml@v3
-        with:
-          ocaml-compiler: 5
-      - run: opam install . --deps-only --with-test
-      - run: opam exec -- dune build
-      # - run: opam exec -- dune runtest
+    - name: Set-up OCaml
+      uses: ocaml/setup-ocaml@v3
+      with:
+        ocaml-compiler: 5
+    - run: opam install . --deps-only --with-test
+    - run: opam exec -- dune build
+    # - run: opam exec -- dune runtest
     - name: Install dependencies
       run: sudo apt-get -y install ocaml ocaml-dune ocaml-odoc libctypes-ocaml-dev libmupdf-dev libfreetype-dev
     - name: Build
