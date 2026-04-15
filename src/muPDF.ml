@@ -55,6 +55,35 @@ module Rectangle = struct
   (**/**)
 end
 
+(** Points. *)
+module Point = struct
+  (** A point. *)
+  type t = float * float
+end
+
+(** Quadrangles. *)
+module Quad = struct
+  (** A representation for a region defined by 4 points. The significant difference between quads and rects is that the edges of quads are not axis aligned. *)
+  type t =
+    {
+      ul : Point.t; (** upper-left corner *)
+      ur : Point.t; (** upper-right corner *)
+      ll : Point.t; (** lower-left corner *)
+      lr : Point.t; (** lower-right corner *)
+    }
+
+  (**/**)
+  let of_struct q =
+    let xy f = let p = getf q f in (getf p Types_generated.point_x, getf p Types_generated.point_y) in
+    {
+      ul = xy Types_generated.quad_ul;
+      ur = xy Types_generated.quad_ur;
+      ll = xy Types_generated.quad_ll;
+      lr = xy Types_generated.quad_lr;
+    }
+  (**/**)
+end
+
 (** Matrices. *)
 module Matrix = struct
   (** A transform matrix. *)
@@ -70,29 +99,6 @@ module Matrix = struct
     setf m Types_generated.matrix_e 0.0;
     setf m Types_generated.matrix_f 0.0;
     m
-end
-
-(** Quadrangles. *)
-module Quad = struct
-  (** A representation for a region defined by 4 points. The significant difference between quads and rects is that the edges of quads are not axis aligned. *)
-  type t =
-    {
-      ul : float * float; (** upper-left corner *)
-      ur : float * float; (** upper-right corner *)
-      ll : float * float; (** lower-left corner *)
-      lr : float * float; (** lower-right corner *)
-    }
-
-  (**/**)
-  let of_struct q =
-    let xy f = let p = getf q f in (getf p Types_generated.point_x, getf p Types_generated.point_y) in
-    {
-      ul = xy Types_generated.quad_ul;
-      ur = xy Types_generated.quad_ur;
-      ll = xy Types_generated.quad_ll;
-      lr = xy Types_generated.quad_lr;
-    }
-  (**/**)
 end
 
 (** Buffers. *)
