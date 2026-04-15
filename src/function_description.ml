@@ -13,6 +13,9 @@ module Functions (F : Ctypes.FOREIGN) = struct
   let new_context = foreign "fz_new_context" (ptr void @-> ptr void @-> int @-> returning (ptr_opt void))
   let drop_context = foreign "fz_drop_context" (context @-> returning void)
 
+  (** Rects. *)
+  let rect_from_quad = foreign "fz_rect_from_quad" (quad @-> returning rect)
+
   (** Matrices. *)
   type matrix = Types.matrix
 

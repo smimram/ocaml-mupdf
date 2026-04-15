@@ -103,6 +103,10 @@ module Quad = struct
     setf s Types_generated.quad_lr @@ Point.to_struct q.lr;
     s
   (**/**)
+
+  (** Convert a quad to the smallest rect that covers it. *)
+  let to_rectangle q =
+    Rectangle.of_struct @@ rect_from_quad @@ to_struct q
 end
 
 (** Matrices. *)
