@@ -3,6 +3,8 @@
 (**/**)
 open Ctypes
 
+open Mupdf_ffi
+
 include C.Functions
 (**/**)
 
