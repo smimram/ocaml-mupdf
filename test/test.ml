@@ -1,4 +1,4 @@
-open Mupdf.MuPDF
+open MuPDF
 
 let () =
   Document.register_handlers ();

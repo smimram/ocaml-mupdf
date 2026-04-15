@@ -7,13 +7,7 @@ Those are far from complete but [requests are welcome](https://github.com/smimra
 
 ## Getting started
 
-In order to use the library, you should start by writing
-
-```ocaml
-open Mupdf.MuPDF
-```
-
-Then have a look at the [test](test/test.ml) or at the [online documentation](https://smimram.github.io/ocaml-mupdf/mupdf/Mupdf/MuPDF/) for more information.
+All the useful functions are in the `MuPDF` module. You can have a look at the [test](test/test.ml) or at the [online documentation](https://smimram.github.io/ocaml-mupdf/mupdf/Mupdf/MuPDF/) for more information.
 
 ## See also
 
