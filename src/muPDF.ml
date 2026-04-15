@@ -26,6 +26,23 @@ end
 let ctx = Context.create ()
 (**/**)
 
+(** Points. *)
+module Point = struct
+  (** A point. *)
+  type t = float * float
+
+  (**/**)
+  let of_struct p : t =
+    (getf p Types_generated.point_x, getf p Types_generated.point_y)
+
+  let to_struct (x,y) =
+    let p = make Types_generated.point in
+    setf p Types_generated.point_x x;
+    setf p Types_generated.point_y y;
+    p
+  (**/**)
+end
+
 (** Rectangles. *)
 module Rectangle = struct
   (** A rectangle. *)
@@ -55,12 +72,6 @@ module Rectangle = struct
   (**/**)
 end
 
-(** Points. *)
-module Point = struct
-  (** A point. *)
-  type t = float * float
-end
-
 (** Quadrangles. *)
 module Quad = struct
   (** A representation for a region defined by 4 points. The significant difference between quads and rects is that the edges of quads are not axis aligned. *)
@@ -74,13 +85,23 @@ module Quad = struct
 
   (**/**)
   let of_struct q =
-    let xy f = let p = getf q f in (getf p Types_generated.point_x, getf p Types_generated.point_y) in
+    let xy f =
+      Point.of_struct @@ getf q f
+    in
     {
       ul = xy Types_generated.quad_ul;
       ur = xy Types_generated.quad_ur;
       ll = xy Types_generated.quad_ll;
       lr = xy Types_generated.quad_lr;
     }
+
+  let to_struct q =
+    let s = make Types_generated.quad in
+    setf s Types_generated.quad_ul @@ Point.to_struct q.ul;
+    setf s Types_generated.quad_ur @@ Point.to_struct q.ur;
+    setf s Types_generated.quad_ll @@ Point.to_struct q.ll;
+    setf s Types_generated.quad_lr @@ Point.to_struct q.lr;
+    s
   (**/**)
 end
 
