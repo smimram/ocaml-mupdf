@@ -37,7 +37,7 @@ module Types (T : Ctypes.TYPE) = struct
   let point_y = field point "y" float
   let () = seal point
 
-  (** Quad (quadrilateral with upper-left, upper-right, lower-left, lower-right corners). *)
+  (** Quad (quadrilateral with upper-left, upper-right, lower-left, lower-right corners). The significant difference with rects is that	the edges of quads are not axis aligned. *)
   type quad
   let quad : quad structure typ = typedef (structure "fz_quad") "fz_quad"
   let quad_ul = field quad "ul" point
