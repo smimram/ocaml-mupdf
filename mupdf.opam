@@ -10,6 +10,7 @@ homepage: "https://github.com/smimram/ocaml-mupdf"
 bug-reports: "https://github.com/smimram/ocaml-mupdf/issues"
 depends: [
   "dune" {>= "3.14"}
+  "ctypes"
   "odoc" {with-doc}
 ]
 build: [

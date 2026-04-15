@@ -14,4 +14,7 @@
  (name mupdf)
  (description "Bindings to the MuPDF library")
  (synopsis "Bindings to the MuPDF library in order to manipulate pdf files")
+ (depends
+   ctypes
+ )
 )
