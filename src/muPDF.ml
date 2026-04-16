@@ -289,5 +289,13 @@ module PDF = struct
 
     (** Graft a page (and its resources) from the src document to the destination document of the graft. This involves a deep copy of the objects in question. *)
     let graft_page (dst:t) page_to (src:t) page_from : unit = PDF.graft_page ctx dst page_to src page_from
+
+    (** Minimize the memory used by a document.
+
+        We walk the in memory xref tables, evicting the PDF objects therein that aren't in use.
+
+	This reduces the current memory use, but any subsequent use of these objects will load them back into memory again.
+     *)
+    let minimize doc : unit = PDF.minimize_document ctx doc
   end
 end

@@ -84,6 +84,7 @@ module Functions (F : Ctypes.FOREIGN) = struct
     let delete_page_range = foreign "pdf_delete_page_range" (context @-> document @-> int @-> int @-> returning void)
     let graft_page = foreign "pdf_graft_page" (context @-> document @-> int @-> document @-> int @-> returning void)
     let save_document = foreign "pdf_save_document" (context @-> document @-> string @-> ptr_opt void @-> returning void)
+    let minimize_document = foreign "pdf_minimize_document" (context @-> document @-> returning void)
   end
 end
 
