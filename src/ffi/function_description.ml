@@ -80,6 +80,8 @@ module Functions (F : Ctypes.FOREIGN) = struct
     let open_document = foreign "pdf_open_document" (context @-> string @-> returning document)
     let drop_document = foreign "pdf_drop_document" (context @-> document @-> returning void)
     let count_pages = foreign "pdf_count_pages" (context @-> document @-> returning int)
+    let delete_page = foreign "pdf_delete_page" (context @-> document @-> int @-> returning void)
+    let delete_page_range = foreign "pdf_delete_page_range" (context @-> document @-> int @-> int @-> returning void)
     let graft_page = foreign "pdf_graft_page" (context @-> document @-> int @-> document @-> int @-> returning void)
     let save_document = foreign "pdf_save_document" (context @-> document @-> string @-> ptr_opt void @-> returning void)
   end
