@@ -251,6 +251,7 @@ end
 
 (** High-level interface for pdf manipulation. *)
 module PDF = struct
+  (** PDF documents. *)
   module Document = struct
     type t = PDF.document
 
@@ -273,7 +274,7 @@ module PDF = struct
     let open_document fname : t = PDF.open_document ctx fname
 
     (** Close document. *)
-    let close doc : unit = PDF.drop_document ctx doc
+    let close (doc:t) : unit = PDF.drop_document ctx doc
 
     (** Write out the document to a file with all changes finalised. *)
     let save (doc:t) fname : unit = PDF.save_document ctx doc fname None
@@ -282,10 +283,10 @@ module PDF = struct
     let count_pages (doc:t) : int = PDF.count_pages ctx doc
 
     (** Delete a page from the page tree of a document. This does not remove the page contents or resources from the file. *)
-    let delete_page doc n : unit = PDF.delete_page ctx doc n
+    let delete_page (doc:t) n : unit = PDF.delete_page ctx doc n
 
     (** Delete a range of pages from the page tree of a document. This does not remove the page contents or resources from the file. *)
-    let delete_page_range doc m n : unit = PDF.delete_page_range ctx doc m n
+    let delete_page_range (doc:t) m n : unit = PDF.delete_page_range ctx doc m n
 
     (** Graft a page (and its resources) from the src document to the destination document of the graft. This involves a deep copy of the objects in question. *)
     let graft_page (dst:t) page_to (src:t) page_from : unit = PDF.graft_page ctx dst page_to src page_from
@@ -296,6 +297,6 @@ module PDF = struct
 
 	This reduces the current memory use, but any subsequent use of these objects will load them back into memory again.
      *)
-    let minimize doc : unit = PDF.minimize_document ctx doc
+    let minimize (doc:t) : unit = PDF.minimize_document ctx doc
   end
 end
