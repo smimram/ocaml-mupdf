@@ -3,9 +3,17 @@
  (libraries mupdf)
 )
 
+(executable
+ (name pdf)
+ (libraries mupdf)
+)
+
 (rule
  (alias runtest)
  (action
-  (run ./test.exe)
+  (progn
+   (run ./test.exe)
+   (run ./pdf.exe)
+  )
  )
 )

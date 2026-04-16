@@ -256,6 +256,22 @@ module PDF = struct
 
     let create () : t = PDF.create_document ctx
 
+    (** Open a PDF document.
+
+	Open a PDF document by reading its cross reference table, so
+	MuPDF can locate PDF objects inside the file. Upon an broken
+	cross reference table or other parse errors MuPDF will restart
+	parsing the file from the beginning to try to rebuild a
+	(hopefully correct) cross reference table to allow further
+	processing of the file.
+
+	The returned pdf_document should be used when calling most
+	other PDF functions. Note that it wraps the context, so those
+	functions implicitly get access to the global state in
+	context.
+     *)
+    let open_document fname : t = PDF.open_document ctx fname
+
     (** Close document. *)
     let close doc : unit = PDF.drop_document ctx doc
 
@@ -267,7 +283,7 @@ module PDF = struct
       PDF.count_pages ctx doc
 
     (** Graft a page (and its resources) from the src document to the destination document of the graft. This involves a deep copy of the objects in question. *)
-    let graft_pages (dst:t) page_to (src:t) page_from : unit =
+    let graft_page (dst:t) page_to (src:t) page_from : unit =
       PDF.graft_page ctx dst page_to src page_from
   end
 end
