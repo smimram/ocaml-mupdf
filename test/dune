@@ -1,11 +1,13 @@
 (executable
  (name test)
  (libraries mupdf)
+ (modules test)
 )
 
 (executable
  (name pdf)
  (libraries mupdf)
+ (modules pdf)
 )
 
 (rule
