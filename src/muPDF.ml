@@ -8,6 +8,7 @@ open Mupdf_ffi
 include C.Functions
 (**/**)
 
+(**/**)
 (** MuPDF computation contexts. *)
 module Context = struct
   type t = context
@@ -23,6 +24,7 @@ module Context = struct
     Gc.finalise drop_context ctx;
     ctx
 end
+(**/**)
 
 (**/**)
 let ctx = Context.create ()
