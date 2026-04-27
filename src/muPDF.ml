@@ -281,6 +281,24 @@ module PDF = struct
     (** Write out the document to a file with all changes finalised. *)
     let save (doc:t) fname : unit = PDF.save_document ctx doc fname None
 
+    (** Do a pass through the document to check if it needs
+	any repairs; and trigger a repair if necessary.
+
+	This is a very expensive operation both in terms of memory use
+	and computation, because it needs to parse the entire file to
+	detect any errors.
+
+	The result of the check is saved, so calling this function again
+	after the initial check is a no-op.
+     *)
+    let check (doc:t) : unit = PDF.check_document ctx doc
+
+    let need_password (doc:t) = PDF.needs_password ctx doc
+
+    let authenticate_password (doc:t) password =
+      let b = PDF.authenticate_password ctx doc password in
+      assert (not b)
+
     (** Count number of pages. *)
     let count_pages (doc:t) : int = PDF.count_pages ctx doc
 
